@@ -8,7 +8,7 @@ public class ActivityClient : MailerSendApi, IActivityClient
 
     public ActivityClient(string apiKey, HttpClient? httpClient = null) : base(apiKey, httpClient)
     {
-        
+
     }
 
     private static readonly JsonSerializerOptions s_PropertyNameCaseInsensitive = new()
@@ -16,10 +16,10 @@ public class ActivityClient : MailerSendApi, IActivityClient
         PropertyNameCaseInsensitive = true
     };
 
-    public async Task<ActivityListResponse?> GetActivitiesAsync(ActivityListOptions? options)
+    public async Task<ActivityListResponse?> GetActivitiesAsync(string domain, ActivityListOptions options)
     {
         var queryParams = BuildQueryParameters(options);
-        var endpoint = "activity";
+        var endpoint = $"activity/{Uri.EscapeDataString(domain)}";
 
         if (!string.IsNullOrEmpty(queryParams))
         {
@@ -40,30 +40,16 @@ public class ActivityClient : MailerSendApi, IActivityClient
         return activityList;
     }
 
-    private static string BuildQueryParameters(ActivityListOptions? options)
+    private static string BuildQueryParameters(ActivityListOptions options)
     {
-        if (options == null)
-            return string.Empty;
-
         var parameters = new List<string>();
-
-        if (!string.IsNullOrEmpty(options.DomainId))
-            parameters.Add($"domain_id={Uri.EscapeDataString(options.DomainId)}");
 
         if (!string.IsNullOrEmpty(options.Event))
             parameters.Add($"event={Uri.EscapeDataString(options.Event)}");
 
-        if (!string.IsNullOrEmpty(options.Recipient))
-            parameters.Add($"recipient={Uri.EscapeDataString(options.Recipient)}");
 
-        if (!string.IsNullOrEmpty(options.MessageId))
-            parameters.Add($"message_id={Uri.EscapeDataString(options.MessageId)}");
-
-        if (options.DateFrom.HasValue)
-            parameters.Add($"date_from={new DateTimeOffset(options.DateFrom.Value).ToUnixTimeSeconds()}");
-
-        if (options.DateTo.HasValue)
-            parameters.Add($"date_to={new DateTimeOffset(options.DateTo.Value).ToUnixTimeSeconds()}");
+        parameters.Add($"date_from={new DateTimeOffset(options.DateFrom).ToUnixTimeSeconds()}");
+        parameters.Add($"date_to={new DateTimeOffset(options.DateTo).ToUnixTimeSeconds()}");
 
         if (options.Page.HasValue)
             parameters.Add($"page={options.Page.Value}");

@@ -4,7 +4,7 @@ namespace MailerSend.Sdk.Activities;
 
 public interface IActivityClient
 {
-    Task<ActivityListResponse?> GetActivitiesAsync(ActivityListOptions? options = null);
+    Task<ActivityListResponse?> GetActivitiesAsync(string domain, ActivityListOptions options);
     Task<Activity?> GetActivityAsync(string id);
 
 }
