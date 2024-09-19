@@ -1,5 +1,7 @@
 using System;
 using System.Net.Http.Headers;
+using System.Text.Json;
+using MailerSend.Sdk.Exceptions;
 
 namespace MailerSend.Sdk;
 
@@ -29,4 +31,49 @@ public class MailerSendApi
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }
+
+    protected static async Task<T?> ProcessResponseAsync<T>(HttpResponseMessage response)
+    {
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            if (typeof(T) == typeof(string))
+            {
+                return (T)(object)responseContent;
+            }
+            else if (typeof(T) == typeof(VoidType))
+            {                
+                return default;
+            }
+            else
+            {
+                return JsonSerializer.Deserialize<T>(responseContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+        }
+        else
+        {
+            ApiErrorResponse? errorResponse = null;
+
+            try
+            {
+                errorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(responseContent, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+            catch
+            {
+            }
+
+            var errorMessage = errorResponse?.Message ?? $"API request failed with status code {(int)response.StatusCode}.";
+
+            throw new MailerSendException(errorMessage, response.StatusCode, errorResponse?.Message, errorResponse?.Errors);
+        }
+    }
 }
+public class VoidType { }
+

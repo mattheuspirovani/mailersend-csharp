@@ -29,15 +29,9 @@ public class ActivityClient : MailerSendApi, IActivityClient
         var response = await _httpClient.GetAsync(endpoint);
 
         var content = await response.Content.ReadAsStringAsync();
+        
+        return await ProcessResponseAsync<ActivityListResponse>(response);
 
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new MailerSendException($"Failed to retrieve activities: {content}", response.StatusCode);
-        }
-
-        var activityList = JsonSerializer.Deserialize<ActivityListResponse>(content, s_PropertyNameCaseInsensitive);
-
-        return activityList;
     }
 
     private static string BuildQueryParameters(ActivityListOptions options)
@@ -71,15 +65,6 @@ public class ActivityClient : MailerSendApi, IActivityClient
 
         var response = await _httpClient.GetAsync(endpoint);
 
-        var content = await response.Content.ReadAsStringAsync();
-
-        if (!response.IsSuccessStatusCode)
-        {
-            throw new MailerSendException($"Failed to retrieve activity: {content}", response.StatusCode);
-        }
-
-        var activity = JsonSerializer.Deserialize<Activity>(content, s_PropertyNameCaseInsensitive);
-
-        return activity;
+        return await ProcessResponseAsync<Activity>(response);        
     }
 }
