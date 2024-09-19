@@ -5,11 +5,11 @@ namespace MailerSend.Sdk.Commons;
 public class PaginationLinks
 {
     [JsonPropertyName("first")]
-    public string First { get; set; }
+    public string First { get; set; } = null!;
 
     [JsonPropertyName("last")]
-    public string Last { get; set; }
-    
+    public string Last { get; set; } = null!;
+
     [JsonPropertyName("prev")]
     public string? Prev { get; set; }
 

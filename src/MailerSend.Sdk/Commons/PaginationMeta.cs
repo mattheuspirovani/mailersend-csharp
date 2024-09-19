@@ -14,7 +14,7 @@ public class PaginationMeta
     public int? LastPage { get; set; }
 
     [JsonPropertyName("path")]
-    public string Path { get; set; }
+    public string Path { get; set; } = null!;
 
     [JsonPropertyName("per_page")]
     public int? PerPage { get; set; }
