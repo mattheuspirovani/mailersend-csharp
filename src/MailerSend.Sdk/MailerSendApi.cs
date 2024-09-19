@@ -9,6 +9,11 @@ public class MailerSendApi
 
     public MailerSendApi(string apiKey, HttpClient? httpClient = null)
     {
+        if (string.IsNullOrWhiteSpace(apiKey))
+        {
+            throw new ArgumentException("API Key its mandatory.", nameof(apiKey));
+        }
+
         _httpClient = httpClient ?? new HttpClient
         {
             BaseAddress = new Uri("https://api.mailersend.com/v1/")
