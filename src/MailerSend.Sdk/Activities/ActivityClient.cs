@@ -16,7 +16,7 @@ public class ActivityClient : MailerSendApi, IActivityClient
         PropertyNameCaseInsensitive = true
     };
 
-    public async Task<ActivityListResponse?> GetActivitiesAsync(ActivityListOptions options)
+    public async Task<ActivityListResponse?> GetActivitiesAsync(ActivityListOptions? options)
     {
         var queryParams = BuildQueryParameters(options);
         var endpoint = "activity";
@@ -40,7 +40,7 @@ public class ActivityClient : MailerSendApi, IActivityClient
         return activityList;
     }
 
-    private static string BuildQueryParameters(ActivityListOptions options)
+    private static string BuildQueryParameters(ActivityListOptions? options)
     {
         if (options == null)
             return string.Empty;
