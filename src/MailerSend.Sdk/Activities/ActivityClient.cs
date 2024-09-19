@@ -11,47 +11,34 @@ public class ActivityClient : MailerSendApi, IActivityClient
 
     }
 
-    private static readonly JsonSerializerOptions s_PropertyNameCaseInsensitive = new()
-    {
-        PropertyNameCaseInsensitive = true
-    };
-
     public async Task<ActivityListResponse?> GetActivitiesAsync(string domain, ActivityListOptions options)
     {
         var queryParams = BuildQueryParameters(options);
-        var endpoint = $"activity/{Uri.EscapeDataString(domain)}";
-
-        if (!string.IsNullOrEmpty(queryParams))
-        {
-            endpoint += $"?{queryParams}";
-        }
+        var resource = $"activity/{Uri.EscapeDataString(domain)}";
+        var endpoint = QueryHelpers.AddQueryString(resource, queryParams);
 
         var response = await _httpClient.GetAsync(endpoint);
 
-        var content = await response.Content.ReadAsStringAsync();
-        
         return await ProcessResponseAsync<ActivityListResponse>(response);
-
     }
 
-    private static string BuildQueryParameters(ActivityListOptions options)
+    private static Dictionary<string, string?> BuildQueryParameters(ActivityListOptions options)
     {
-        var parameters = new List<string>();
+        var queryArguments = new Dictionary<string, string?>();
 
         if (!string.IsNullOrEmpty(options.Event))
-            parameters.Add($"event={Uri.EscapeDataString(options.Event)}");
+            queryArguments.Add("event", Uri.EscapeDataString(options.Event));
 
-
-        parameters.Add($"date_from={new DateTimeOffset(options.DateFrom).ToUnixTimeSeconds()}");
-        parameters.Add($"date_to={new DateTimeOffset(options.DateTo).ToUnixTimeSeconds()}");
+        queryArguments.Add("date_from", new DateTimeOffset(options.DateFrom).ToUnixTimeSeconds().ToString());
+        queryArguments.Add("date_to", new DateTimeOffset(options.DateTo).ToUnixTimeSeconds().ToString());
 
         if (options.Page.HasValue)
-            parameters.Add($"page={options.Page.Value}");
+            queryArguments.Add("page", options.Page.Value.ToString());
 
         if (options.Limit.HasValue)
-            parameters.Add($"limit={options.Limit.Value}");
-
-        return string.Join("&", parameters);
+            queryArguments.Add("limit", options.Limit.Value.ToString());
+        
+        return queryArguments;
     }
 
     public async Task<Activity?> GetActivityAsync(string id)
@@ -65,6 +52,6 @@ public class ActivityClient : MailerSendApi, IActivityClient
 
         var response = await _httpClient.GetAsync(endpoint);
 
-        return await ProcessResponseAsync<Activity>(response);        
+        return await ProcessResponseAsync<Activity>(response);
     }
 }
