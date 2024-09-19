@@ -8,6 +8,10 @@ namespace MailerSend.Sdk;
 public class MailerSendApi
 {
     protected readonly HttpClient _httpClient;
+    private static readonly JsonSerializerOptions _propertyNameCaseInsensitive = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
 
     public MailerSendApi(string apiKey, HttpClient? httpClient = null)
     {
@@ -48,10 +52,7 @@ public class MailerSendApi
             }
             else
             {
-                return JsonSerializer.Deserialize<T>(responseContent, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                return JsonSerializer.Deserialize<T>(responseContent, _propertyNameCaseInsensitive);
             }
         }
         else
@@ -60,13 +61,11 @@ public class MailerSendApi
 
             try
             {
-                errorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(responseContent, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                errorResponse = JsonSerializer.Deserialize<ApiErrorResponse>(responseContent, _propertyNameCaseInsensitive);
             }
             catch
             {
+                throw new MailerSendException("Failed to process exception response", response.StatusCode);
             }
 
             var errorMessage = errorResponse?.Message ?? $"API request failed with status code {(int)response.StatusCode}.";
