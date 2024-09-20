@@ -49,6 +49,8 @@ public class DomainClient : MailerSendApi, IDomainsClient
 
         var response = await _httpClient.GetAsync(endpoint);
 
-        return await ProcessResponseAsync<Domain>(response);        
+        var domainResponse = await ProcessResponseAsync<DomainResponse>(response);        
+
+        return domainResponse?.Data;
     }
 }
