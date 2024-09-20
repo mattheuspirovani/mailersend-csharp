@@ -52,6 +52,8 @@ public class ActivityClient : MailerSendApi, IActivityClient
 
         var response = await _httpClient.GetAsync(endpoint);
 
-        return await ProcessResponseAsync<Activity>(response);
+        var activityResponse = await ProcessResponseAsync<ActivityResponse>(response);
+
+        return activityResponse?.Data;
     }
 }
