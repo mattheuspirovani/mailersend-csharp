@@ -69,4 +69,16 @@ public class DomainClient : MailerSendApi, IDomainsClient
 
         return domainResponse?.Data;
     }
+
+    public async Task<bool> DeleteDomainAsync(string domainId)
+    {
+        if (string.IsNullOrWhiteSpace(domainId))
+            throw new ArgumentException("Domain ID cannot be null or empty.", nameof(domainId));
+
+        var endpoint = $"domains/{Uri.EscapeDataString(domainId)}";
+
+        var response = await _httpClient.DeleteAsync(endpoint);
+
+        return response.IsSuccessStatusCode;
+    }
 }
