@@ -154,4 +154,16 @@ public class DomainClient : MailerSendApi, IDomainsClient
 
         return dnsRecordsResponse?.Data;
     }
+
+    public async Task<DomainVerificationStatusResponse?> GetDomainVerificationStatusAsync(string domainId)
+    {
+        if (string.IsNullOrWhiteSpace(domainId))
+            throw new ArgumentException("Domain ID cannot be null or empty.", nameof(domainId));
+
+        var endpoint = $"domains/{Uri.EscapeDataString(domainId)}/verify";
+
+        var response = await _httpClient.GetAsync(endpoint);
+
+        return await ProcessResponseAsync<DomainVerificationStatusResponse>(response);        
+    }
 }

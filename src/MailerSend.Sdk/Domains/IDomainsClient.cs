@@ -9,4 +9,5 @@ public interface IDomainsClient
     Task<RecipientListResponse?> GetRecipientsAsync(string domainId, RecipientListOptions? options = null);
     Task<Domain?> UpdateDomainSettingsAsync(string domainId, UpdateDomainSettingsRequest request);
     Task<DnsRecord?> GetDnsRecordsAsync(string domainId);
+    Task<DomainVerificationStatusResponse?> GetDomainVerificationStatusAsync(string domainId);
 }
