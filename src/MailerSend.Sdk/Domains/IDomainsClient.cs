@@ -1,5 +1,3 @@
-using System;
-
 namespace MailerSend.Sdk.Domains;
 
 public interface IDomainsClient
