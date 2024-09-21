@@ -12,13 +12,16 @@ public class Domain
     public string? Name { get; set; }
 
     [JsonPropertyName("dkim")]
-    public bool Dkim { get; set; }
+    public bool? Dkim { get; set; }
 
     [JsonPropertyName("spf")]
-    public bool Spf { get; set; }
+    public bool? Spf { get; set; }
+
+    [JsonPropertyName("mx")]
+    public bool? Mx { get; set; }
 
     [JsonPropertyName("tracking")]
-    public bool Tracking { get; set; }
+    public bool? Tracking { get; set; }
 
     [JsonPropertyName("is_verified")]
     public bool IsVerified { get; set; }
@@ -49,6 +52,23 @@ public class Domain
 
     [JsonPropertyName("updated_at")]
     public DateTime? UpdatedAt { get; set; }
+    [JsonPropertyName("can")]
+    public DomainPermissions? Can { get; set; }
+
+    [JsonPropertyName("totals")]
+    public List<object>? Totals { get; set; } // Usando object porque "totals" está vazio no exemplo
+
+    [JsonPropertyName("registrar")]
+    public string? Registrar { get; set; }
+
+    [JsonPropertyName("is_dkim_txt")]
+    public bool? IsDkimTxt { get; set; }
+
+    [JsonPropertyName("show_dkim_info")]
+    public bool? ShowDkimInfo { get; set; }
+
+    [JsonPropertyName("is_being_verified")]
+    public bool? IsBeingVerified { get; set; }
 }
 
 public class DomainSettings
@@ -85,4 +105,10 @@ public class DomainSettings
 
     [JsonPropertyName("ignore_duplicated_recipients")]
     public bool IgnoreDuplicatedRecipients { get; set; }
+}
+
+public class DomainPermissions
+{
+    [JsonPropertyName("manage")]
+    public bool Manage { get; set; }
 }

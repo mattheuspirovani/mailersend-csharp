@@ -1,3 +1,6 @@
+using System.Text;
+using System.Text.Json;
+
 namespace MailerSend.Sdk.Domains;
 
 public class DomainClient : MailerSendApi, IDomainsClient
@@ -49,7 +52,20 @@ public class DomainClient : MailerSendApi, IDomainsClient
 
         var response = await _httpClient.GetAsync(endpoint);
 
-        var domainResponse = await ProcessResponseAsync<DomainResponse>(response);        
+        var domainResponse = await ProcessResponseAsync<DomainResponse>(response);
+
+        return domainResponse?.Data;
+    }
+
+    public async Task<Domain?> CreateDomainAsync(CreateDomainRequest request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        var json = JsonSerializer.Serialize(request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync("domains", content);
+        var domainResponse = await ProcessResponseAsync<DomainResponse>(response);
 
         return domainResponse?.Data;
     }
