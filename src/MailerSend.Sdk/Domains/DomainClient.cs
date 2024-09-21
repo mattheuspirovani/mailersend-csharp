@@ -12,7 +12,7 @@ public class DomainClient : MailerSendApi, IDomainsClient
 
     public async Task<DomainListResponse?> GetDomainsAsync(DomainsListOptions? options)
     {
-        var queryParams = BuildQueryParameters(options);
+        var queryParams = BuildGetDomainQueryParameters(options);
         var resource = "domains";
         var endpoint = QueryHelpers.AddQueryString(resource, queryParams);
 
@@ -21,7 +21,7 @@ public class DomainClient : MailerSendApi, IDomainsClient
         return await ProcessResponseAsync<DomainListResponse>(response);
     }
 
-    private static Dictionary<string, string?> BuildQueryParameters(DomainsListOptions? options)
+    private static Dictionary<string, string?> BuildGetDomainQueryParameters(DomainsListOptions? options)
     {
         var queryArguments = new Dictionary<string, string?>();
 
@@ -80,5 +80,45 @@ public class DomainClient : MailerSendApi, IDomainsClient
         var response = await _httpClient.DeleteAsync(endpoint);
 
         return response.IsSuccessStatusCode;
+    }
+
+    public async Task<RecipientListResponse?> GetRecipientsAsync(string domainId, RecipientListOptions? options = null)
+    {
+        if (string.IsNullOrWhiteSpace(domainId))
+            throw new ArgumentException("Domain ID cannot be null or empty.", nameof(domainId));
+
+        var resource = $"domains/{Uri.EscapeDataString(domainId)}/recipients";
+        var endpoint = BuildGetRecipientQueryParams(resource, options);
+
+        var response = await _httpClient.GetAsync(endpoint);
+
+        var recipientsResponse = await ProcessResponseAsync<RecipientListResponse>(response);
+
+        return recipientsResponse;
+    }
+
+    private string BuildGetRecipientQueryParams(string baseUrl, RecipientListOptions? options)
+    {
+        var queryParams = new Dictionary<string, string?>();
+
+        if (options != null)
+        {
+            if (options.Page.HasValue)
+            {
+                queryParams.Add("page", options.Page.Value.ToString());
+            }
+
+            if (options.Limit.HasValue)
+            {
+                queryParams.Add("limit", options.Limit.Value.ToString());
+            }
+        }
+
+        if (queryParams.Count > 0)
+        {
+            baseUrl = QueryHelpers.AddQueryString(baseUrl, queryParams);
+        }
+
+        return baseUrl;
     }
 }

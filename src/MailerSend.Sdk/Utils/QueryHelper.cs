@@ -1,7 +1,6 @@
 using System.Text;
 using System.Text.Encodings.Web;
 
-
 public static class QueryHelpers
 {
     /// <summary>
