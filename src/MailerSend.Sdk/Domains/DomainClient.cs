@@ -121,4 +121,23 @@ public class DomainClient : MailerSendApi, IDomainsClient
 
         return baseUrl;
     }
+
+    public async Task<Domain?> UpdateDomainSettingsAsync(string domainId, UpdateDomainSettingsRequest request)
+    {
+        if (string.IsNullOrWhiteSpace(domainId))
+            throw new ArgumentException("Domain ID cannot be null or empty.", nameof(domainId));
+
+        ArgumentNullException.ThrowIfNull(request);
+
+        var endpoint = $"domains/{Uri.EscapeDataString(domainId)}/settings";
+
+        var json = JsonSerializer.Serialize(request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PutAsync(endpoint, content);
+
+        var domainResponse = await ProcessResponseAsync<DomainResponse>(response);
+
+        return domainResponse?.Data;
+    }
 }

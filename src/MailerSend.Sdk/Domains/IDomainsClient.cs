@@ -7,4 +7,5 @@ public interface IDomainsClient
     Task<Domain?> CreateDomainAsync(CreateDomainRequest request);
     Task<bool> DeleteDomainAsync(string domainId);
     Task<RecipientListResponse?> GetRecipientsAsync(string domainId, RecipientListOptions? options = null);
+    Task<Domain?> UpdateDomainSettingsAsync(string domainId, UpdateDomainSettingsRequest request);
 }
