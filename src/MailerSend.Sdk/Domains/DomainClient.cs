@@ -140,4 +140,18 @@ public class DomainClient : MailerSendApi, IDomainsClient
 
         return domainResponse?.Data;
     }
+
+    public async Task<DnsRecord?> GetDnsRecordsAsync(string domainId)
+    {
+        if (string.IsNullOrWhiteSpace(domainId))
+            throw new ArgumentException("Domain ID cannot be null or empty.", nameof(domainId));
+
+        var endpoint = $"domains/{Uri.EscapeDataString(domainId)}/dns-records";
+
+        var response = await _httpClient.GetAsync(endpoint);
+
+        var dnsRecordsResponse = await ProcessResponseAsync<DnsRecordsResponse>(response);
+
+        return dnsRecordsResponse?.Data;
+    }
 }

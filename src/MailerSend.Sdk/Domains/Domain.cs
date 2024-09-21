@@ -56,7 +56,7 @@ public class Domain
     public DomainPermissions? Can { get; set; }
 
     [JsonPropertyName("totals")]
-    public List<object>? Totals { get; set; } // Usando object porque "totals" está vazio no exemplo
+    public object? Totals { get; set; } //TODO check correct format
 
     [JsonPropertyName("registrar")]
     public string? Registrar { get; set; }
