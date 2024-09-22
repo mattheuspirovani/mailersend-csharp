@@ -8,7 +8,7 @@ namespace MailerSend.Sdk;
 public class MailerSendApi
 {
     protected readonly HttpClient _httpClient;
-    private static readonly JsonSerializerOptions _propertyNameCaseInsensitive = new()
+    protected static readonly JsonSerializerOptions _propertyNameCaseInsensitive = new()
     {
         PropertyNameCaseInsensitive = true
     };
@@ -35,7 +35,7 @@ public class MailerSendApi
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }
-
+    
     protected static async Task<T?> ProcessResponseAsync<T>(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
