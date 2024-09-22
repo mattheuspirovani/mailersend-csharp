@@ -6,7 +6,7 @@ namespace MailerSend.Sdk.Emails;
 public class SendEmailRequest
 {
     [JsonPropertyName("from")]
-    public EmailSender From { get; set; }
+    public EmailSender? From { get; set; }
 
     [JsonPropertyName("to")]
     public List<EmailRecipient> To { get; set; }
@@ -20,7 +20,7 @@ public class SendEmailRequest
     public List<EmailRecipient>? Bcc { get; set; }
 
     [JsonPropertyName("subject")]
-    public string Subject { get; set; }
+    public string? Subject { get; set; }
 
     [JsonPropertyName("text")]
     public string? Text { get; set; }
@@ -57,9 +57,10 @@ public class SendEmailRequest
         Text = text;
     }
 
-    public SendEmailRequest(string templateId)
+    public SendEmailRequest(string templateId,  List<EmailRecipient> to)
     {
         TemplateId = templateId;
+        To = to;
     }
 
     public void Validate()
@@ -81,12 +82,12 @@ public class SendEmailRequest
 
     private void ValidateFromAndTemplateId()
     {
-        if (TemplateId == null && From == null)
+        if (string.IsNullOrWhiteSpace(TemplateId) && From == null)
         {
             throw new ValidationException("The 'from' field is required unless 'template_id' is present.");
         }
 
-        if (From?.Email == null)
+        if (From != null && From.Email == null)
         {
             throw new ValidationException("The 'from.email' field is required and must be a verified domain or subdomain.");
         }
@@ -134,7 +135,7 @@ public class SendEmailRequest
 
     private void ValidateSubject()
     {
-        if (TemplateId == null && string.IsNullOrWhiteSpace(Subject))
+        if (string.IsNullOrWhiteSpace(TemplateId) && string.IsNullOrWhiteSpace(Subject))
         {
             throw new ValidationException("The 'subject' field is required unless 'template_id' is present.");
         }
@@ -147,7 +148,9 @@ public class SendEmailRequest
 
     private void ValidateContent()
     {
-        if (string.IsNullOrWhiteSpace(Text) && string.IsNullOrWhiteSpace(Html) && TemplateId == null)
+        if (string.IsNullOrWhiteSpace(Text)
+            && string.IsNullOrWhiteSpace(Html)
+            && string.IsNullOrWhiteSpace(TemplateId))
         {
             throw new ValidationException("Either 'text', 'html', or 'template_id' must be provided.");
         }
@@ -274,7 +277,7 @@ public class EmailPersonalization
     public Dictionary<string, string>? Data { get; set; }
 }
 
-public class EmailSettings 
+public class EmailSettings
 {
     [JsonPropertyName("track_clicks")]
     public bool TrackClicks { get; set; }
