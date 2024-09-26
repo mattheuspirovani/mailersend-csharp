@@ -27,30 +27,6 @@ public class EmailClient : MailerSendApi, IEmailClient
         return await ProcessSendEmailResponseAsync<EmailSendStatus>(response);
     }
 
-    public async Task<BulkEmailResponse?> SendBulkEmailAsync(List<SendEmailRequest> request)
-    {
-        ArgumentNullException.ThrowIfNull(request);
-
-        ValidateBulkEmail(request);
-        
-        var endpoint = "bulk-email";
-
-        var json = JsonSerializer.Serialize(request);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-        var response = await _httpClient.PostAsync(endpoint, content);
-
-        return await ProcessResponseAsync<BulkEmailResponse>(response);
-    }
-
-    protected static void ValidateBulkEmail(List<SendEmailRequest> request) 
-    {
-        foreach (var email in request)
-        {
-            email.Validate();
-        }
-    }
-
     protected static async Task<EmailSendStatus> ProcessSendEmailResponseAsync<T>(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
@@ -83,5 +59,43 @@ public class EmailClient : MailerSendApi, IEmailClient
 
             throw new MailerSendException(errorMessage, response.StatusCode, errorResponse?.Message, errorResponse?.Errors);
         }
+    }
+
+    public async Task<BulkEmailResponse?> SendBulkEmailAsync(List<SendEmailRequest> request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        ValidateBulkEmail(request);
+
+        var endpoint = "bulk-email";
+
+        var json = JsonSerializer.Serialize(request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync(endpoint, content);
+
+        return await ProcessResponseAsync<BulkEmailResponse>(response);
+    }
+
+    protected static void ValidateBulkEmail(List<SendEmailRequest> request)
+    {
+        foreach (var email in request)
+        {
+            email.Validate();
+        }
+    }
+
+    public async Task<BulkEmailStatus?> GetBulkEmailStatusAsync(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            throw new ArgumentException("Bulk Email ID cannot be null or empty.", nameof(id));
+
+        var endpoint = $"bulk-email/{Uri.EscapeDataString(id)}";
+
+        var response = await _httpClient.GetAsync(endpoint);
+
+        var bulkEmailResponse = await ProcessResponseAsync<GetBulkEmailResponse>(response);
+
+        return bulkEmailResponse?.Data;
     }
 }
