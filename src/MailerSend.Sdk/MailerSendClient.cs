@@ -18,4 +18,9 @@ public class MailerSendClient
         Domains = new DomainClient(apiKey, httpClient);
         Email = new EmailClient(apiKey,httpClient);
     }
+
+    public async Task<EmailSendStatus> SendEmailAsync(SendEmailRequest sendEmailRequest) 
+    {
+        return await Email.SendEmailAsync(sendEmailRequest);
+    }
 }

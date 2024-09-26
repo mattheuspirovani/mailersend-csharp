@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Json;
 using MailerSend.Sdk.Exceptions;
@@ -25,10 +24,34 @@ public class EmailClient : MailerSendApi, IEmailClient
 
         var response = await _httpClient.PostAsync(endpoint, content);
 
-        return await ProcessResponseAsync<EmailSendStatus>(response);
+        return await ProcessSendEmailResponseAsync<EmailSendStatus>(response);
     }
 
-    protected static new async Task<EmailSendStatus> ProcessResponseAsync<T>(HttpResponseMessage response)
+    public async Task<BulkEmailResponse?> SendEmailAsync(List<SendEmailRequest> request)
+    {
+        ArgumentNullException.ThrowIfNull(request);
+
+        ValidateBulkEmail(request);
+        
+        var endpoint = "bulk-email";
+
+        var json = JsonSerializer.Serialize(request);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync(endpoint, content);
+
+        return await ProcessResponseAsync<BulkEmailResponse>(response);
+    }
+
+    protected static void ValidateBulkEmail(List<SendEmailRequest> request) 
+    {
+        foreach (var email in request)
+        {
+            email.Validate();
+        }
+    }
+
+    protected static async Task<EmailSendStatus> ProcessSendEmailResponseAsync<T>(HttpResponseMessage response)
     {
         var responseContent = await response.Content.ReadAsStringAsync();
 
