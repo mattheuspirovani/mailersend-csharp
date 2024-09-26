@@ -23,4 +23,9 @@ public class MailerSendClient
     {
         return await Email.SendEmailAsync(sendEmailRequest);
     }
+
+    public async Task<BulkEmailResponse?> SendBulkEmailAsync(List<SendEmailRequest> sendEmailRequest) 
+    {
+        return await Email.SendBulkEmailAsync(sendEmailRequest);
+    }
 }

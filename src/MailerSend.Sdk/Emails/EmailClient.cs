@@ -27,7 +27,7 @@ public class EmailClient : MailerSendApi, IEmailClient
         return await ProcessSendEmailResponseAsync<EmailSendStatus>(response);
     }
 
-    public async Task<BulkEmailResponse?> SendEmailAsync(List<SendEmailRequest> request)
+    public async Task<BulkEmailResponse?> SendBulkEmailAsync(List<SendEmailRequest> request)
     {
         ArgumentNullException.ThrowIfNull(request);
 
