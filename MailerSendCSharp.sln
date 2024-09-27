@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{194FDE68-F8E9-4B2C-A181-5B3FF62CFFFF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6123C30C-2911-4CA1-9234-8CF91336D1B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailerSend.Tests", "tests\MailerSend.Tests\MailerSend.Tests.csproj", "{C6B5585D-0C05-4FCB-96BC-370ECDC4A265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailerSend.Sdk", "src\MailerSend.Sdk\MailerSend.Sdk.csproj", "{1A1CA0FE-7C3F-4F2E-8AC0-982E421D4EEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C6B5585D-0C05-4FCB-96BC-370ECDC4A265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B5585D-0C05-4FCB-96BC-370ECDC4A265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B5585D-0C05-4FCB-96BC-370ECDC4A265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B5585D-0C05-4FCB-96BC-370ECDC4A265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A1CA0FE-7C3F-4F2E-8AC0-982E421D4EEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A1CA0FE-7C3F-4F2E-8AC0-982E421D4EEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A1CA0FE-7C3F-4F2E-8AC0-982E421D4EEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A1CA0FE-7C3F-4F2E-8AC0-982E421D4EEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6B5585D-0C05-4FCB-96BC-370ECDC4A265} = {6123C30C-2911-4CA1-9234-8CF91336D1B1}
+		{1A1CA0FE-7C3F-4F2E-8AC0-982E421D4EEB} = {194FDE68-F8E9-4B2C-A181-5B3FF62CFFFF}
+	EndGlobalSection
+EndGlobal
