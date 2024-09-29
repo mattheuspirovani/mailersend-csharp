@@ -2,6 +2,8 @@
 
 The MailerSend SDK for C# is a comprehensive library designed to simplify integration with the [MailerSend](https://www.mailersend.com/) API. It provides developers with an easy-to-use interface for sending emails, managing domains, tracking activities, and sending SMS messages. This SDK abstracts the complexity of the API, allowing developers to focus on building their applications without worrying about the underlying HTTP details. 
 
+[![Main branch](https://github.com/mattheuspirovani/mailersend-csharp/actions/workflows/main_ci_cd.yml/badge.svg)](https://github.com/mattheuspirovani/mailersend-csharp/actions/workflows/main_ci_cd.yml)
+
 ## Table of Contents
 
 - [MailerSend SDK for C#](#mailersend-sdk-for-c)
