@@ -26,7 +26,7 @@ public class BulkEmailStatus
     public List<string>? ValidationErrors { get; set; } //TODO Assuming validation_errors is a list
 
     [JsonPropertyName("messages_id")]
-    public List<string> MessagesId { get; set; }  // Converted from string to list
+    public List<string>? MessagesId { get; set; }  // Converted from string to list
 
     [JsonPropertyName("created_at")]
     public DateTime CreatedAt { get; set; }
