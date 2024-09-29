@@ -98,4 +98,15 @@ public class EmailClient : MailerSendApi, IEmailClient
 
         return bulkEmailResponse?.Data;
     }
+
+    public async Task<EmailVerificationResponse?> EmailVerificationAsync(EmailVerificationRequest emailVerificationRequest)
+    {
+        var endpoint = "email-verification/verify";
+        var json = JsonSerializer.Serialize(emailVerificationRequest);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _httpClient.PostAsync(endpoint, content);
+
+        return await ProcessResponseAsync<EmailVerificationResponse>(response);
+    }
 }
