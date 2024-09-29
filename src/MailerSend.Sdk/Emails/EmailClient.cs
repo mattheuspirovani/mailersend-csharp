@@ -109,4 +109,26 @@ public class EmailClient : MailerSendApi, IEmailClient
 
         return await ProcessResponseAsync<EmailVerificationResponse>(response);
     }
+
+    public async Task<EmailVerificationListResponse?> GetAllEmailVerificationsAsync(int page = 1, int limit = 25)
+    {
+        var resource = "email-verification";
+        var queryParameters = BuildQueryParameters(page, limit); 
+        var endpoint = QueryHelpers.AddQueryString(resource, queryParameters);
+
+        var response = await _httpClient.GetAsync(endpoint);
+
+        return await ProcessResponseAsync<EmailVerificationListResponse>(response);
+    }
+
+    private static Dictionary<string, string?> BuildQueryParameters(int page = 1, int limit = 25)
+    {
+        var queryArguments = new Dictionary<string, string?>
+        {
+            { "page", page.ToString() },
+            { "limit", limit.ToString() },
+        };
+
+        return queryArguments;
+    }
 }
